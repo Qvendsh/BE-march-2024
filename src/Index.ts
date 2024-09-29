@@ -1,12 +1,10 @@
-const express = require('express')
-const {write, read} = require('./fs.service')
+import express from 'express'
+import {read, write} from './fs.service'
+
 const app = express()
 
 app.use(express.json())
 app.use(express.urlencoded({ extended:true }))
-
-
-
 
 
 
@@ -25,7 +23,7 @@ app.post('/users',async (req, res)=>{
 
         const id = users[users.length - 1].id + 1
         const newUser = {id, name, email, password}
-        await write()
+        await write(users)
 
         users.push(newUser)
         res.status(201).send(newUser)
@@ -63,7 +61,7 @@ app.put('/users/:userId',async(req,res)=>{
         users[userIndex].name = name
         users[userIndex].email = email
         users[userIndex].password = password
-        await write()
+        await write(users)
         res.status(201).send(users[userIndex])
     }catch (e){
         res.status(500).send(e.message)
@@ -78,7 +76,7 @@ app.delete('/users/:userId',async (req,res)=>{
             return res.status(404).send('User not found')
         }
         users.splice(userIndex,1)
-        await write()
+        await write(users)
         res.sendStatus(204)
     }catch (e){
         res.status(500).send(e.message)
