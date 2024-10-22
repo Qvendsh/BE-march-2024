@@ -1,33 +1,27 @@
-const http = require("node:http")
-const path = require("node:path")
-const readLine = require("node:readline/promises")
+const express = require('express')
 
-const {func: helperfunc} = require("./helpers/helper")
+const app = express()
 
-const foo = async () => {
-    // const server = http.createServer((req, res)=>{
-    //     res.writeHead(200,{'Content-Type': 'application/json'})
-    //     res.end(JSON.stringify({
-    //         data: 'hello world'
-    //         }))
-    // })
-    // server.listen(3000)
+app.use(express.json())
+app.use(express.urlencoded({extended:true}))
 
-    // const pathToFile = __filename
-    // console.log(path.dirname(pathToFile))
-    // console.log(pathToFile)
-    // console.log(path.extname(pathToFile))
-    // console.log(path.basename(pathToFile))
-    // console.log(path.parse(pathToFile))
+app.get('/users', (req,res) => {
+    res.send("hello qvend")
+})
+
+app.post('/users',(req, res) => {
+    console.log(req.body)
+    res.send('hello qvend 2')
+})
+
+app.post('/users/:userId', (req, res) => {
+    console.log(req.body)
+    console.log(req.params)
+    console.log(req.query)
+    res.send('hello qvend 2')
+})
 
 
-    const rlInstance = readLine.createInterface({
-        input: process.stdin,
-        output: process.stdout
-    })
-    const name = await rlInstance.question("name?")
-    console.log(`your name is ${name}`)
-    process.exit(0)
-}
-
-void foo()
+app.listen(3000,()=>{
+    console.log('server is running on port 3000')
+})
