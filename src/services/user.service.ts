@@ -21,6 +21,36 @@ class UserService{
         }
         return await userRepository.create(dto)
     }
+
+    public async updateById(userId:number, dto:IUser):Promise<IUser>{
+        if(!dto.name || dto.name.length < 3){
+            throw new ApiError(
+                'name is required and should be at least 3 characters long',
+                400
+            )
+        }
+        if(!dto.email || !dto.email.includes("@")){
+            throw new ApiError(
+                'email is required and should include "@"',
+                400
+            )
+        }
+        if(!dto.password || dto.password.length < 6){
+            throw new ApiError(
+                'password is required and sould be at least 6 characters',
+                400
+            )
+        }
+        return await userRepository.updateById(userId,dto)
+    }
+
+    public async deleteById(userId:number):Promise<void>{
+        const user = await userRepository.getById(userId)
+        if(!user){
+            throw new ApiError('User not found', 404)
+        }
+        return await userRepository.deleteById(userId)
+    }
 }
 
 export const userService = new UserService()
